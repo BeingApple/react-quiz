@@ -6,6 +6,7 @@ type State = {
   endAt: Moment | null
   correctCount: number
   wrongCount: number
+  index: number
 }
 
 const initialState: State = {
@@ -13,27 +14,31 @@ const initialState: State = {
   endAt: null,
   correctCount: 0,
   wrongCount: 0,
+  index: 0,
 }
 
 const answers = createSlice({
   name: 'answers',
   initialState,
   reducers: {
-    start(state, action) {
+    onStart(state, action) {
       state.startAt = action.payload.startAt
     },
-    end(state, action) {
+    onEnd(state, action) {
       state.endAt = action.payload.endAt
     },
-    correct(state) {
+    onCorrect(state) {
       state.correctCount += 1
     },
-    wrong(state) {
+    onWrong(state) {
       state.wrongCount += 1
+    },
+    addIndex(state) {
+      state.index += 1
     }
   }
 })
 
 export default answers.reducer
 
-export const { start, end, correct, wrong } = answers.actions
+export const { onStart, onEnd, onCorrect, onWrong, addIndex } = answers.actions

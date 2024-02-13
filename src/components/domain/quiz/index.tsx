@@ -1,28 +1,18 @@
 import { quizListQuery } from "@/queries/quiz-queries"
 import { useQuery } from "@tanstack/react-query"
-import { useEffect } from "react"
+import QuizItem from "./QuizItem"
 
-export type Props = {
-  isStart?: boolean
-  index?: number
-}
 
-export const QuizList = ({isStart, index}: Props) => {
+export const QuizList = () => {  
   const { data } = useQuery({
     ...quizListQuery(),
     select: (data) => data.results.map(quiz => ({
-      answers: quiz.incorrect_answers.concat(quiz.correct_answer).sort(() => Math.random() - 0.5),
+      answers: quiz.incorrect_answers.concat(quiz.correct_answer),
       ...quiz
     }))
   })
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
   return (
-    <>
-      {data?.join("/")}
-    </>
+    <QuizItem items={data ?? []} />
   )
 }
