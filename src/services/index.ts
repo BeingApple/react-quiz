@@ -1,0 +1,1 @@
+export * as quizService from './quizService'
