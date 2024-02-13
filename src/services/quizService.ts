@@ -1,10 +1,7 @@
+import { Quiz, QuizDifficulty, QuizType } from "@/types/quiz-types"
 import client from "./clients/client"
 
-type QuizType = 'multiple' | 'boolean'
-type QuizDifficulty = 'easy' | 'medium' | 'hard'
-
 //* Requests */
-
 export type GetQuizListRequest = {
   amount?: Number
   difficulty?: QuizDifficulty
@@ -15,14 +12,7 @@ export type GetQuizListRequest = {
 //* Response */
 type GetQuizListResponse = {
   response_code: number
-  results: Array<{
-    type: QuizType
-    difficulty: QuizDifficulty
-    category: string
-    question: string
-    correct_answer: string
-    incorrect_answers: Array<string>
-  }>
+  results: Array<Quiz>
 }
 
 export async function getQuizList(request: GetQuizListRequest = {amount: 10, type: 'multiple'}) {
