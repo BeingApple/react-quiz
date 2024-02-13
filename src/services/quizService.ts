@@ -32,5 +32,7 @@ export async function getQuizList(request: GetQuizListRequest = {amount: 10, typ
     params,
   })
 
+  console.log(response)
+
   return response
 }
