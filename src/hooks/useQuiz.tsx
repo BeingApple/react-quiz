@@ -46,6 +46,8 @@ const useQuiz = () => {
   }
 
   const restart = () => {
+    setPlaying(false)
+    setEnd(false)
     refetch()
   }
 
@@ -53,11 +55,11 @@ const useQuiz = () => {
     const item = data?.at(index)
 
     if (item) {
-      item.answers = item?.incorrect_answers
+      const answers = item?.incorrect_answers
         .concat(item.correct_answer)
         .sort(() => Math.random() - 0.5)
-
-      setItem(item)
+ 
+      setItem({answers: answers, ...item})
     }
   }, [data, index])
 
