@@ -1,19 +1,20 @@
+import { Quiz } from '@/types/quiz-types'
 import { createSlice } from '@reduxjs/toolkit'
 import { Moment } from 'moment'
 
 type State = {
   startAt: Moment | null
   endAt: Moment | null
-  correctCount: number
-  wrongCount: number
+  correctList: Array<Quiz>
+  wrongList: Array<Quiz>
   index: number
 }
 
 const initialState: State = {
   startAt: null,
   endAt: null,
-  correctCount: 0,
-  wrongCount: 0,
+  correctList: [],
+  wrongList: [],
   index: 0,
 }
 
@@ -27,11 +28,11 @@ const answers = createSlice({
     onEnd(state, action) {
       state.endAt = action.payload.endAt
     },
-    onCorrect(state) {
-      state.correctCount += 1
+    onCorrect(state, action) {
+      state.correctList.push(action.payload)
     },
-    onWrong(state) {
-      state.wrongCount += 1
+    onWrong(state, action) {
+      state.wrongList.push(action.payload)
     },
     addIndex(state) {
       state.index += 1

@@ -1,61 +1,82 @@
 import { AppState } from "@/store/reducers"
-import { onStart, onCorrect, onWrong, addIndex, onEnd } from "@/store/reducers/answers"
+import { onCorrect, onWrong, addIndex } from "@/store/reducers/answers"
 import { Quiz } from "@/types/quiz-types"
-import moment from "moment"
-import { useState, useEffect } from "react"
+import { Button, Typography, Paper, Card, CardContent, styled, Divider, Box, CardActionArea, Grid } from "@mui/material"
+import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
+import {decode} from 'html-entities';
+
+const QuizPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  ...theme.typography.body2,
+  textAlign: 'left',
+  minWidth: 500,
+}));
 
 type Props = {
-  items: Array<Quiz>
+  item: Quiz
 }
 
-const QuizItem = ({items}: Props) => {
+const QuizItem = ({item}: Props) => {
   const dispatch = useDispatch()
-  const { startAt, endAt, index, wrongCount, correctCount } = useSelector((state: AppState) => state.answers)
+  const { index } = useSelector((state: AppState) => state.answers)
 
-  const [start, setStart] = useState(startAt != null)
-  const [item, setItem] = useState<Quiz | undefined>()
-
-  const onClickStart = () => {
-    setStart(true)
-    dispatch(onStart({startAt: moment()}))
-  }
+  const [answers, setAnswers] = useState<Array<string>>()
+  const [isCorrect, setCorrect] = useState<boolean>();
+  const [isAnswered, setAnswered] = useState(false);
 
   const onClickAnswer = (answer: string) => {
-    dispatch(item!.correct_answer === answer ? onCorrect() : onWrong())
-    dispatch(addIndex())
+    const isCorrect = item!.correct_answer === answer
 
-    if (index === items.length - 1) { 
-      dispatch(onEnd({endAt: moment()}))
-    }
+    setCorrect(isCorrect)
+    setAnswered(true)
+    
+    dispatch(isCorrect ? onCorrect(item) : onWrong(item))
+  }
+
+  const onNext = () => {
+    dispatch(addIndex())
   }
 
   useEffect(() => {
-    setItem(items?.at(index))
-  }, [items, index, setItem])
+    setAnswers(item.incorrect_answers
+      .concat(item.correct_answer)
+      .sort(() => Math.random() - 0.5))
+
+      setAnswered(false)
+  }, [item])
 
   return (
-    <>
-      {start && item ? (
-        <>
-          <p>{item.category}</p>
-          <p>{item.difficulty}</p>
-          <p>{item.question}</p>
-          <ul>
-            {item.answers?.sort(() => Math.random() - 0.5).map((answer, i) => (
-              <li key={i}>
-                <button onClick={() => onClickAnswer(answer)}>{answer}</button>
-              </li>
-            ))}
-          </ul>
-        </>
-      ) : (
-        <>
-          <p>{index} / {wrongCount} / {correctCount} / {startAt?.format()} / {endAt?.format()}</p>
-          <button onClick={onClickStart}>시작하기</button>
-        </>
-      )}
-    </>
+    <QuizPaper>
+        <Box sx={{p: 2}}>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item.category)}</Typography>
+          <Typography variant="h5" component="div">{decode(item.question)}</Typography>
+        </Box>
+        <Divider />
+        <Box sx={{p: 2}}>
+          {isAnswered ? (
+            <Box sx={{textAlign: 'center'}}>
+              <Typography variant="h5" component="div" color={isCorrect? "green" : "red"}>{isCorrect ? '정답' : '오답'}</Typography>
+              <Button variant="outlined" size="large" onClick={onNext} sx={{m: 2}}>다음 문제</Button>
+            </Box>
+          ) : (
+            <Grid container spacing={2}>
+              {answers?.map((answer, i) => (
+                <Grid item key={i}>
+                  <Card sx={{p: 2, width: 200, height: "100%"}}>
+                    <CardActionArea onClick={() => onClickAnswer(answer)}>
+                      <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">{i+1}</Typography>
+                        <Typography variant="body2" color="text.secondary">{decode(answer)}</Typography>
+                      </CardContent>
+                    </CardActionArea>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
+        </Box>
+    </QuizPaper>
   )
 }
 
