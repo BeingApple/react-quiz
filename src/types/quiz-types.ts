@@ -9,4 +9,5 @@ export type Quiz = {
   correct_answer: string
   incorrect_answers: Array<string>
   answers?: Array<string>
+  select_answer?: string
 }

@@ -1,56 +1,22 @@
-import { AppState } from "@/store/reducers"
-import { onCorrect, onWrong, addIndex } from "@/store/reducers/answers"
 import { Quiz } from "@/types/quiz-types"
-import { Button, Typography, Paper, Card, CardContent, styled, Divider, Box, CardActionArea, Grid } from "@mui/material"
-import { useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
+import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid } from "@mui/material"
 import {decode} from 'html-entities';
-
-const QuizPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  ...theme.typography.body2,
-  textAlign: 'left',
-  minWidth: 500,
-}));
+import QuizPaper from "./QuizPaper";
 
 type Props = {
-  item: Quiz
+  item?: Quiz
+  isAnswered: Boolean
+  isCorrect?: Boolean
+  onClickAnswer: (answer: string) => void
+  onNext: () => void
 }
 
-const QuizItem = ({item}: Props) => {
-  const dispatch = useDispatch()
-  const { index } = useSelector((state: AppState) => state.answers)
-
-  const [answers, setAnswers] = useState<Array<string>>()
-  const [isCorrect, setCorrect] = useState<boolean>();
-  const [isAnswered, setAnswered] = useState(false);
-
-  const onClickAnswer = (answer: string) => {
-    const isCorrect = item!.correct_answer === answer
-
-    setCorrect(isCorrect)
-    setAnswered(true)
-    
-    dispatch(isCorrect ? onCorrect(item) : onWrong(item))
-  }
-
-  const onNext = () => {
-    dispatch(addIndex())
-  }
-
-  useEffect(() => {
-    setAnswers(item.incorrect_answers
-      .concat(item.correct_answer)
-      .sort(() => Math.random() - 0.5))
-
-      setAnswered(false)
-  }, [item])
-
+const QuizItem = ({item, isAnswered, isCorrect, onClickAnswer, onNext}: Props) => {
   return (
     <QuizPaper>
         <Box sx={{p: 2}}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item.category)}</Typography>
-          <Typography variant="h5" component="div">{decode(item.question)}</Typography>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item?.category)}</Typography>
+          <Typography variant="h5" component="div">{decode(item?.question)}</Typography>
         </Box>
         <Divider />
         <Box sx={{p: 2}}>
@@ -60,9 +26,9 @@ const QuizItem = ({item}: Props) => {
               <Button variant="outlined" size="large" onClick={onNext} sx={{m: 2}}>다음 문제</Button>
             </Box>
           ) : (
-            <Grid container spacing={2}>
-              {answers?.map((answer, i) => (
-                <Grid item key={i}>
+            <Grid container spacing={2} sx={{justifyContent: 'center'}}>
+              {item?.answers?.map((answer, i) => (
+                <Grid item key={i} xs="auto">
                   <Card sx={{p: 2, width: 200, height: "100%"}}>
                     <CardActionArea onClick={() => onClickAnswer(answer)}>
                       <CardContent>
