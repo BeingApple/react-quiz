@@ -1,7 +1,7 @@
 import { Quiz } from "@/types/quiz-types"
 import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid } from "@mui/material"
 import {decode} from 'html-entities';
-import QuizPaper from "./QuizPaper";
+import QuizPaper from "../../ui-components/QuizPaper";
 
 type Props = {
   item?: Quiz

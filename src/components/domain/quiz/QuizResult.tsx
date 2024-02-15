@@ -1,6 +1,6 @@
 import { AppState } from "@/store/reducers"
 import { useSelector } from "react-redux"
-import QuizPaper from "./QuizPaper"
+import QuizPaper from "../../ui-components/QuizPaper"
 import { Moment } from "moment"
 import { Button, Typography } from "@mui/material"
 
