@@ -1,26 +1,44 @@
 import QuizPaper from "../../ui-components/QuizPaper"
 import { Box, Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material"
 import { Moment } from "moment"
-import { Quiz } from "@/types/quiz-types"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import moment from "moment"
 import { durationToString } from "@/utils/date-utils"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData } from "chart.js";
 import { Pie } from "react-chartjs-2";
+import { useQuery } from "@tanstack/react-query"
+import { quizListQuery } from "@/queries/quiz-queries"
+import { useDispatch } from "react-redux"
+import { resetList } from "@/store/reducers/answers"
+import { resetIndex, setStatus } from "@/store/reducers/playing"
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 type Props = {
   startAt: Moment | null
   endAt: Moment | null
-  correctList: Array<Quiz>
-  wrongList: Array<Quiz>
-  restart: () => void 
+  correctCount: number
+  wrongCount: number
 }
 
-const QuizResult = ({startAt, endAt, correctList, wrongList, restart}: Props) => {
+const QuizResult = ({startAt, endAt, correctCount, wrongCount}: Props) => {
+  const dispatch = useDispatch()
+  
   const [timeString, setTimeString] = useState('')
   const [chartData, setChartData] = useState<ChartData<"pie", number[], unknown>>()
+
+  const { refetch } = useQuery({
+    ...quizListQuery(),
+    staleTime: Infinity,
+    select: (data) => data.results
+  })
+
+  const onReset = useCallback(() => {
+    refetch()
+    dispatch(resetIndex())
+    dispatch(setStatus('not-start'))
+    dispatch(resetList())
+  }, [dispatch, refetch])
 
   useEffect(() => {
     if (startAt && endAt) {
@@ -34,7 +52,7 @@ const QuizResult = ({startAt, endAt, correctList, wrongList, restart}: Props) =>
       labels: ['정답', '오답'],
       datasets: [{
         label: '갯수',
-        data: [correctList.length, wrongList.length],
+        data: [correctCount, wrongCount],
         backgroundColor: [
           'rgba(75, 192, 192, 0.2)',
           'rgba(255, 99, 132, 0.2)',
@@ -48,7 +66,7 @@ const QuizResult = ({startAt, endAt, correctList, wrongList, restart}: Props) =>
     }
 
     setChartData(data)
-  }, [correctList, wrongList])
+  }, [correctCount, wrongCount])
 
   return (
     <QuizPaper>
@@ -62,10 +80,10 @@ const QuizResult = ({startAt, endAt, correctList, wrongList, restart}: Props) =>
             <Typography variant="body2" color="text.secondary">소요된 시간 : {timeString}</Typography>
           </QuizPaper>
           <QuizPaper>
-            <Typography variant="body2" color="text.secondary">정답 개수 : {correctList.length}</Typography>
+            <Typography variant="body2" color="text.secondary">정답 개수 : {correctCount}</Typography>
           </QuizPaper>
           <QuizPaper>
-            <Typography variant="body2" color="text.secondary">오답 개수 : {wrongList.length}</Typography>
+            <Typography variant="body2" color="text.secondary">오답 개수 : {wrongCount}</Typography>
           </QuizPaper>
           <Card>
             <CardContent>
@@ -74,7 +92,7 @@ const QuizResult = ({startAt, endAt, correctList, wrongList, restart}: Props) =>
           </Card>
         </Stack>
       </Box>
-      <Button onClick={restart}>재시작</Button>
+      <Button onClick={onReset}>재시작</Button>
     </QuizPaper>
   )
 }
