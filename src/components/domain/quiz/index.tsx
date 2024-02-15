@@ -5,7 +5,7 @@ import usePlayingStatus from "@/hooks/usePlayingStatus"
 import QuizResult from "./QuizResult"
 import { useDispatch, useSelector } from "react-redux"
 import { AppState } from "@/store/reducers"
-import { resetIndex } from "@/store/reducers/answers"
+import { resetIndex } from "@/store/reducers/playing"
 import { useQuery } from "@tanstack/react-query"
 import { quizListQuery } from "@/queries/quiz-queries"
 import { Quiz } from "@/types/quiz-types"
@@ -13,7 +13,7 @@ import { Quiz } from "@/types/quiz-types"
 export default function QuizList() {  
   const dispatch = useDispatch()
 
-  const { index } = useSelector((state: AppState) => state.answers)
+  const { index } = useSelector((state: AppState) => state.playing)
   const {status, onStart, onEnd, onRetry, ...resultStat} = usePlayingStatus()
 
   const { data, refetch } = useQuery({

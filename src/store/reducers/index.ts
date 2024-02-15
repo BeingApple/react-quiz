@@ -1,9 +1,11 @@
 import { combineReducers } from "@reduxjs/toolkit"
 
 import answers from "./answers"
+import playing from "./playing"
 
 const reducers = combineReducers({
-  answers
+  answers,
+  playing
 })
 
 export type AppState = ReturnType<typeof reducers>

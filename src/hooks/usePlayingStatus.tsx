@@ -1,5 +1,6 @@
 import { AppState } from "@/store/reducers";
-import { resetList, setEndAt, setStartAt } from "@/store/reducers/answers";
+import { resetList } from "@/store/reducers/answers";
+import { setStartAt, setEndAt } from "@/store/reducers/playing";
 import { PlayingStatus } from "@/types/quiz-types";
 import moment from "moment";
 import { useCallback, useState } from "react"
@@ -7,7 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 const usePlayingStatus = () => {
   const dispatch = useDispatch()
-  const { startAt, endAt, wrongList, correctList } = useSelector((state: AppState) => state.answers)
+  const { startAt, endAt } = useSelector((state: AppState) => state.playing)
+  const { wrongList, correctList } = useSelector((state: AppState) => state.answers)
 
   const [status, setStatus] = useState<PlayingStatus>('not-start')
 
