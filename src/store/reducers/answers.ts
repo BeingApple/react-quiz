@@ -20,10 +20,10 @@ const answers = createSlice({
   name: 'answers',
   initialState,
   reducers: {
-    onStart(state, action) {
+    setStartAt(state, action) {
       state.startAt = action.payload
     },
-    onEnd(state, action) {
+    setEndAt(state, action) {
       state.endAt = action.payload
     },
     onCorrect(state, action) {
@@ -31,10 +31,14 @@ const answers = createSlice({
     },
     onWrong(state, action) {
       state.wrongList.push(action.payload)
+    },
+    resetList(state) {
+      state.wrongList = []
+      state.correctList = []
     }
   }
 })
 
 export default answers.reducer
 
-export const { onStart, onEnd, onCorrect, onWrong } = answers.actions
+export const { setStartAt, setEndAt, onCorrect, onWrong, resetList } = answers.actions

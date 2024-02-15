@@ -5,16 +5,18 @@ export default function Home() {
 
 
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ bgcolor: '#cfe8fc', 
-          height: '100vh', 
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center', }} >
-        <QuizList/>
-      </Box>
-    </Container>
+    <div style={{ display: 'flex' }}>
+      <Container maxWidth={false} disableGutters>
+        <Box sx={{ bgcolor: '#cfe8fc', 
+            display: 'flex',
+            minHeight: '100vh',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center', }} >
+          <QuizList/>
+        </Box>
+      </Container>
+    </div>
   );
 }
 

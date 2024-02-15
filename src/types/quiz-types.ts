@@ -1,3 +1,4 @@
+export type PlayingStatus = 'not-start' | 'playing' | 'result'
 export type QuizType = 'multiple' | 'boolean'
 export type QuizDifficulty = 'easy' | 'medium' | 'hard'
 

@@ -1,12 +1,11 @@
 import { quizListQuery } from "@/queries/quiz-queries"
-import { onCorrect, onEnd, onStart, onWrong } from "@/store/reducers/answers"
+import { onCorrect, onWrong, resetList } from "@/store/reducers/answers"
 import { Quiz } from "@/types/quiz-types"
 import { useQuery } from "@tanstack/react-query"
-import moment from "moment"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useDispatch } from "react-redux"
 
-const useQuiz = () => {
+const useQuiz = (index: number) => {
   const dispatch = useDispatch()
 
   const { data, refetch } = useQuery({
@@ -15,22 +14,11 @@ const useQuiz = () => {
     select: (data) => data.results
   })
 
-  const [playing, setPlaying] = useState(false)
-  const [end, setEnd] = useState(false)
   const [isCorrect, setCorrect] = useState<boolean>();
   const [isAnswered, setAnswered] = useState(false);
-  const [index, setIndex] = useState<number>(0)
   const [item, setItem] = useState<Quiz | undefined>()
 
-  const start = () => {
-    setPlaying(true)
-    setEnd(false)
-    setIndex(0)
-    dispatch(onStart(moment()))
-  }
-
-
-  const onClickAnswer = (answer: string) => {
+  const onClickAnswer = useCallback((answer: string) => {
     const isCorrect = item!.correct_answer === answer
     const answerData = {select_answer: answer, ...item}
 
@@ -38,18 +26,8 @@ const useQuiz = () => {
     setAnswered(true)
     
     dispatch(isCorrect ? onCorrect(answerData) : onWrong(answerData))
-  }
+  }, [dispatch, item])
 
-  const onNext = () => {
-    setIndex((prev) => ++prev)
-    setAnswered(false)
-  }
-
-  const restart = () => {
-    setPlaying(false)
-    setEnd(false)
-    refetch()
-  }
 
   useEffect(() => {
     const item = data?.at(index)
@@ -61,17 +39,15 @@ const useQuiz = () => {
  
       setItem({answers: answers, ...item})
     }
+
+    return () => {
+      setCorrect(undefined)
+      setAnswered(false)
+    }
   }, [data, index])
 
-  useEffect(() => {
-    if (playing && data && index >= data.length) {
-      setPlaying(false)
-      setEnd(true)
-      dispatch(onEnd(moment()))
-    }
-  }, [data, dispatch, index, playing])
 
-  return {playing, end, item, isCorrect, isAnswered, start, onClickAnswer, onNext, restart}
+  return {size: data?.length ?? 0, item, isCorrect, isAnswered, onClickAnswer, refetch}
 }
 
 export default useQuiz
