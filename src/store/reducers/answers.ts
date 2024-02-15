@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { Moment } from 'moment'
 
 type State = {
+  index: number
   startAt: Moment | null
   endAt: Moment | null
   correctList: Array<Quiz>
@@ -10,6 +11,7 @@ type State = {
 }
 
 const initialState: State = {
+  index: 0,
   startAt: null,
   endAt: null,
   correctList: [],
@@ -35,10 +37,16 @@ const answers = createSlice({
     resetList(state) {
       state.wrongList = []
       state.correctList = []
+    },
+    addIndex(state) {
+      state.index += 1
+    },
+    resetIndex(state) {
+      state.index = 0
     }
   }
 })
 
 export default answers.reducer
 
-export const { setStartAt, setEndAt, onCorrect, onWrong, resetList } = answers.actions
+export const { setStartAt, setEndAt, onCorrect, onWrong, resetList, addIndex, resetIndex } = answers.actions

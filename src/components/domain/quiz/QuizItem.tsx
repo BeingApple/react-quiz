@@ -2,16 +2,41 @@ import { Quiz } from "@/types/quiz-types"
 import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid } from "@mui/material"
 import {decode} from 'html-entities';
 import QuizPaper from "../../ui-components/QuizPaper";
+import { addIndex, onCorrect, onWrong } from "@/store/reducers/answers";
+import { useState, useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 type Props = {
   item?: Quiz
-  isAnswered: Boolean
-  isCorrect?: Boolean
-  onClickAnswer: (answer: string) => void
-  onNext: () => void
 }
 
-const QuizItem = ({item, isAnswered, isCorrect, onClickAnswer, onNext}: Props) => {
+const QuizItem = ({item}: Props) => {
+  const dispatch = useDispatch()
+
+  const [isCorrect, setCorrect] = useState<boolean>();
+  const [isAnswered, setAnswered] = useState(false);
+
+  const onClickAnswer = useCallback((answer: string) => {
+    const isCorrect = item!.correct_answer === answer
+    const answerData = {select_answer: answer, ...item}
+
+    setCorrect(isCorrect)
+    setAnswered(true)
+    
+    dispatch(isCorrect ? onCorrect(answerData) : onWrong(answerData))
+  }, [dispatch, item])
+
+  const onNext = useCallback(() => {
+    dispatch(addIndex())
+  }, [dispatch])
+
+  useEffect(() => {
+    return () => {
+      setCorrect(undefined)
+      setAnswered(false)
+    }
+  }, [item])
+
   return (
     <QuizPaper>
         <Box sx={{p: 2}}>
@@ -23,7 +48,7 @@ const QuizItem = ({item, isAnswered, isCorrect, onClickAnswer, onNext}: Props) =
           {isAnswered ? (
             <Box sx={{textAlign: 'center'}}>
               <Typography variant="h5" component="div" color={isCorrect? "green" : "red"}>{isCorrect ? '정답' : '오답'}</Typography>
-              <Button variant="outlined" size="large" onClick={onNext} sx={{m: 2}}>다음 문제</Button>
+              <Button variant="outlined" size="large" onClick={onNext} sx={{m: 2}}>다음 문항</Button>
             </Box>
           ) : (
             <Grid container spacing={2} sx={{justifyContent: 'center'}}>

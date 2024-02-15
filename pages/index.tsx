@@ -1,4 +1,4 @@
-import { QuizList } from "@/components/domain/quiz";
+import QuizList from "@/components/domain/quiz";
 import { Box, Container } from "@mui/material";
 
 export default function Home() {

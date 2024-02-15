@@ -3,7 +3,7 @@ import { HydrationBoundary, QueryClient, QueryClientProvider } from "@tanstack/r
 import type { AppProps } from "next/app";
 import { Provider as ReduxProvider } from 'react-redux'
 import { useState } from "react";
-import { store } from '@/store/store'
+import { setupStore } from '@/store/store'
 import Head from "next/head";
 import { CssBaseline } from "@mui/material";
 
@@ -15,7 +15,7 @@ const [queryClient] = useState(() => new QueryClient())
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ReduxProvider store={store}>
+      <ReduxProvider store={setupStore()}>
         <QueryClientProvider client={queryClient}>
           <HydrationBoundary state={dehydratedState}>
             <CssBaseline />
