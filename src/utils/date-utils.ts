@@ -17,7 +17,6 @@ const units: Array<Unit> = [
 export const durationToString = (duration: moment.Duration) => {
   let string = ""
 
-  console.log(duration)
   for (const unit of units) {
     const unitTime = duration.get(unit.unit)
     if (unitTime > 0) {

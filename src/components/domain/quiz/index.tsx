@@ -16,7 +16,7 @@ export default function QuizList() {
   const { status, index, startAt, endAt } = useSelector((state: AppState) => state.playing)
   const { correctList, wrongList } = useSelector((state: AppState) => state.answers)
 
-  const { data } = useQuery({
+  const { data, isSuccess } = useQuery({
     ...quizListQuery(),
     staleTime: Infinity,
     select: (data) => data.results
