@@ -35,10 +35,10 @@ export default function QuizList() {
   }, [dispatch]);
   
   useEffect(() => {
-    if (status == 'playing' && index >= (data?.length ?? 0) ) {
+    if (isSuccess && index >= (data?.length ?? 0) ) {
       onEnd()
     }
-  }, [data, index, onEnd, status])
+  }, [data, index, isSuccess, onEnd])
 
   useEffect(() => {
     const item = data?.at(index)
