@@ -2,14 +2,13 @@ import { Quiz } from "@/types/quiz-types"
 import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid } from "@mui/material"
 import {decode} from 'html-entities';
 import QuizPaper from "../../ui-components/QuizPaper";
-import { onCorrect, onWrong } from "@/store/reducers/answers";
-import { useState, useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { addIndex } from "@/store/reducers/playing";
 import useQuizAnswer from "@/hooks/useQuizAnswer";
 
 type Props = {
-  item?: Quiz
+  item: Quiz
 }
 
 const QuizItem = ({item}: Props) => {
@@ -26,8 +25,8 @@ const QuizItem = ({item}: Props) => {
   return (
     <QuizPaper>
         <Box sx={{p: 2}}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item?.category)}</Typography>
-          <Typography variant="h5" component="div">{decode(item?.question)}</Typography>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item.category)}</Typography>
+          <Typography variant="h5" component="div">{decode(item.question)}</Typography>
         </Box>
         <Divider />
         <Box sx={{p: 2}}>
@@ -38,7 +37,7 @@ const QuizItem = ({item}: Props) => {
             </Box>
           ) : (
             <Grid container spacing={2} sx={{justifyContent: 'center'}}>
-              {item?.answers?.map((answer, i) => (
+              {item.answers?.map((answer, i) => (
                 <Grid item key={i} xs="auto">
                   <Card sx={{p: 2, width: 200, height: "100%"}}>
                     <CardActionArea onClick={() => onClickAnswer(answer)}>

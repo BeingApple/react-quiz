@@ -6,22 +6,31 @@ import { useState } from "react";
 import { setupStore } from '@/store/store'
 import Head from "next/head";
 import { CssBaseline } from "@mui/material";
+import Layout from "@/components/ui-components/Layout";
+import { persistStore } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 export default function App({ Component, pageProps: { dehydratedState, ...restPageProps } }: AppProps) {
-const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(() => new QueryClient())
+  const store = setupStore()
+  const persistor = persistStore(store);
 
   return (
     <>
       <Head>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ReduxProvider store={setupStore()}>
-        <QueryClientProvider client={queryClient}>
-          <HydrationBoundary state={dehydratedState}>
-            <CssBaseline />
-            <Component {...restPageProps} />
-          </HydrationBoundary>
-        </QueryClientProvider>
+      <ReduxProvider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <QueryClientProvider client={queryClient}>
+            <HydrationBoundary state={dehydratedState}>
+              <CssBaseline />
+              <Layout>
+                <Component {...restPageProps} />
+              </Layout>
+            </HydrationBoundary>
+          </QueryClientProvider>
+        </PersistGate>
       </ReduxProvider>
     </>
   );

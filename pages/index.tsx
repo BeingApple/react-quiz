@@ -1,22 +1,53 @@
-import QuizList from "@/components/domain/quiz";
-import { Box, Container } from "@mui/material";
+import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Snackbar } from "@mui/material";
+import { useRouter } from "next/router";
+import InboxIcon from '@mui/icons-material/Inbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import useCheckEmptyNote from "@/hooks/useCheckEmptyNote";
+import { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "@/store/reducers/snackbar";
 
 export default function Home() {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const {isEmpty} = useCheckEmptyNote()
+
+  const moveToQuiz = useCallback(() => {
+    router.push('/quiz')
+  }, [router])
+
+  const moveToNote = useCallback(() => {
+    if (!isEmpty) {
+      router.push('/note')
+    } else {
+      dispatch(showSnackbar({
+        message: '아직 오답노트가 없습니다. 문제를 푼 후 다시 와주세요',
+      }))
+    }
+  }, [isEmpty, router, dispatch])
 
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Container maxWidth={false} disableGutters>
-        <Box sx={{ bgcolor: '#cfe8fc', 
-            display: 'flex',
-            minHeight: '100vh',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center', }} >
-          <QuizList/>
-        </Box>
-      </Container>
-    </div>
+    <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <List>
+        <ListItem disablePadding>
+          <ListItemButton onClick={moveToQuiz}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary="퀴즈" />
+          </ListItemButton>
+        </ListItem>
+        <ListItem disablePadding>
+          <ListItemButton onClick={moveToNote}>
+            <ListItemIcon>
+              <DraftsIcon />
+            </ListItemIcon>
+            <ListItemText primary="오답노트" />
+          </ListItemButton>
+        </ListItem>
+      </List>
+    </Box>
   );
 }
 

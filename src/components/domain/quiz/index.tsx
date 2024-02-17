@@ -1,5 +1,5 @@
 import QuizItem from "./QuizItem"
-import { Button } from "@mui/material"
+import { Button, CircularProgress } from "@mui/material"
 import QuizResult from "./QuizResult"
 import { useSelector } from "react-redux"
 import { AppState } from "@/store/reducers"
@@ -30,8 +30,8 @@ export default function QuizList() {
       {
         {
           ['not-start']: <Button variant="outlined" size="large" onClick={onStart}>퀴즈 풀기</Button>,
-          ['playing']: <QuizItem item={item} />,
-          ['result']: <QuizResult startAt={startAt} endAt={endAt} correctCount={correctList.length} wrongCount={wrongList.length} />,
+          ['playing']: item ? <QuizItem item={item} /> : <CircularProgress />,
+          ['result']: <QuizResult startAt={startAt} endAt={endAt} correctList={correctList} wrongList={wrongList} />,
         }[status]
       }
     </>
