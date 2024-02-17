@@ -6,6 +6,7 @@ import { onCorrect, onWrong } from "@/store/reducers/answers";
 import { useState, useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addIndex } from "@/store/reducers/playing";
+import useQuizAnswer from "@/hooks/useQuizAnswer";
 
 type Props = {
   item?: Quiz
@@ -14,29 +15,13 @@ type Props = {
 const QuizItem = ({item}: Props) => {
   const dispatch = useDispatch()
 
-  const [isCorrect, setCorrect] = useState<boolean>();
-  const [isAnswered, setAnswered] = useState(false);
-
-  const onClickAnswer = useCallback((answer: string) => {
-    const isCorrect = item!.correct_answer === answer
-    const answerData = {select_answer: answer, ...item}
-
-    setCorrect(isCorrect)
-    setAnswered(true)
-    
-    dispatch(isCorrect ? onCorrect(answerData) : onWrong(answerData))
-  }, [dispatch, item])
+  const {isCorrect, isAnswered, onClickAnswer} = useQuizAnswer({
+    item: item
+  })
 
   const onNext = useCallback(() => {
     dispatch(addIndex())
   }, [dispatch])
-
-  useEffect(() => {
-    return () => {
-      setCorrect(undefined)
-      setAnswered(false)
-    }
-  }, [item])
 
   return (
     <QuizPaper>

@@ -1,56 +1,29 @@
 import QuizItem from "./QuizItem"
 import { Button } from "@mui/material"
-import { useCallback, useEffect, useState } from "react"
 import QuizResult from "./QuizResult"
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { AppState } from "@/store/reducers"
 import { useQuery } from "@tanstack/react-query"
 import { quizListQuery } from "@/queries/quiz-queries"
-import { Quiz } from "@/types/quiz-types"
-import { setEndAt, setStartAt, setStatus } from "@/store/reducers/playing"
-import moment from "moment"
+import useQuizItem from "@/hooks/useQuizItem"
+import useGameStatus from "@/hooks/useGameStatus"
 
 export default function QuizList() {  
-  const dispatch = useDispatch()
-
   const { status, index, startAt, endAt } = useSelector((state: AppState) => state.playing)
   const { correctList, wrongList } = useSelector((state: AppState) => state.answers)
 
-  const { data, isSuccess } = useQuery({
+  const { data } = useQuery({
     ...quizListQuery(),
     staleTime: Infinity,
     select: (data) => data.results
   })
 
-  const [item, setItem] = useState<Quiz | undefined>()
-
-  const onStart = useCallback(() => {
-    dispatch(setStatus('playing'))
-    dispatch(setStartAt(moment()))
-  }, [dispatch]);
-
-  const onEnd = useCallback(() => {
-    dispatch(setStatus('result'))
-    dispatch(setEndAt(moment()))
-  }, [dispatch]);
-  
-  useEffect(() => {
-    if (isSuccess && index >= (data?.length ?? 0) ) {
-      onEnd()
-    }
-  }, [data, index, isSuccess, onEnd])
-
-  useEffect(() => {
-    const item = data?.at(index)
-
-    if (item) {
-      const answers = item?.incorrect_answers
-        .concat(item.correct_answer)
-        .sort(() => Math.random() - 0.5)
- 
-      setItem({answers: answers, ...item})
-    }
-  }, [data, index])
+  const {onStart, onEnd} = useGameStatus()
+  const item = useQuizItem({
+    list: data,
+    index: index,
+    onEnd: onEnd
+  })
 
   return (
     <>
