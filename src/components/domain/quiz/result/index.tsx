@@ -1,4 +1,4 @@
-import QuizPaper from "../../ui-components/QuizPaper"
+import QuizPaper from "../../../ui-components/quiz/QuizPaper"
 import { Box, Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material"
 import { Moment } from "moment"
 import { useCallback } from "react"

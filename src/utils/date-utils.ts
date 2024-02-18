@@ -1,4 +1,5 @@
-import { unitOfTime } from "moment"
+import moment from "moment"
+import { Moment, unitOfTime } from "moment"
 
 type Unit = {
   unit: unitOfTime.Base
@@ -25,4 +26,10 @@ export const durationToString = (duration: moment.Duration) => {
   }
 
   return string.trim();
+}
+
+export const dateToString = (date?: Moment) => {
+  date = (typeof date === 'string' || date instanceof String) ? moment(date) : date
+
+  return date?.format("yyyy-MM-DD HH:mm:ss") ?? ""
 }

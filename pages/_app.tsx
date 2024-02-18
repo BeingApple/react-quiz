@@ -6,7 +6,7 @@ import { useState } from "react";
 import { setupStore } from '@/store/store'
 import Head from "next/head";
 import { CssBaseline } from "@mui/material";
-import Layout from "@/components/ui-components/Layout";
+import Layout from "@/components/layout/Layout";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 

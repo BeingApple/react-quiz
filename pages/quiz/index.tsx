@@ -1,6 +1,6 @@
-import QuizList from "@/components/domain/quiz";
+import QuizList from "@/components/domain/quiz/list";
 
-export default function Home() {
+export default function Quiz() {
   return (
     <QuizList/>
   );

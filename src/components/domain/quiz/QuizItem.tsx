@@ -1,21 +1,23 @@
 import { Quiz } from "@/types/quiz-types"
 import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid } from "@mui/material"
 import {decode} from 'html-entities';
-import QuizPaper from "../../ui-components/QuizPaper";
+import QuizPaper from "../../ui-components/quiz/QuizPaper";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { addIndex } from "@/store/reducers/playing";
 import useQuizAnswer from "@/hooks/useQuizAnswer";
 
 type Props = {
-  item: Quiz
+  item?: Quiz
+  isNote?: boolean
 }
 
-const QuizItem = ({item}: Props) => {
+const QuizItem = ({item, isNote}: Props) => {
   const dispatch = useDispatch()
 
   const {isCorrect, isAnswered, onClickAnswer} = useQuizAnswer({
-    item: item
+    item: item,
+    isNote: isNote
   })
 
   const onNext = useCallback(() => {
@@ -25,19 +27,25 @@ const QuizItem = ({item}: Props) => {
   return (
     <QuizPaper>
         <Box sx={{p: 2}}>
-          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item.category)}</Typography>
-          <Typography variant="h5" component="div">{decode(item.question)}</Typography>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item?.category)}</Typography>
+          <Typography variant="h5" component="div">{decode(item?.question)}</Typography>
         </Box>
         <Divider />
         <Box sx={{p: 2}}>
-          {isAnswered ? (
+          {isAnswered ? 
             <Box sx={{textAlign: 'center'}}>
               <Typography variant="h5" component="div" color={isCorrect? "green" : "red"}>{isCorrect ? '정답' : '오답'}</Typography>
+              {isNote ? (
+                <>
+                  <Typography variant="h5" component="div" >정답은 {item?.correct_answer}입니다</Typography>
+                  <Typography variant="h5" component="div" >내가 지난 번에 고른 답 : {item?.select_answer}</Typography>
+                </>
+              ) : <></>}
               <Button variant="outlined" size="large" onClick={onNext} sx={{m: 2}}>다음 문항</Button>
             </Box>
-          ) : (
+           : 
             <Grid container spacing={2} sx={{justifyContent: 'center'}}>
-              {item.answers?.map((answer, i) => (
+              {item?.answers?.map((answer, i) => (
                 <Grid item key={i} xs="auto">
                   <Card sx={{p: 2, width: 200, height: "100%"}}>
                     <CardActionArea onClick={() => onClickAnswer(answer)}>
@@ -50,7 +58,7 @@ const QuizItem = ({item}: Props) => {
                 </Grid>
               ))}
             </Grid>
-          )}
+          }
         </Box>
     </QuizPaper>
   )

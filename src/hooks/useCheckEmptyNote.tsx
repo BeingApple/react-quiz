@@ -9,7 +9,6 @@ export default function useCheckEmptyNote() {
 
   useEffect(() => {
     setEmpty(noteList.length == 0)
-    console.log(noteList)
   }, [noteList])
 
   return {isEmpty: empty}

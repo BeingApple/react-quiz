@@ -5,9 +5,10 @@ import { useDispatch } from "react-redux";
 
 type Props = {
   item?: Quiz
+  isNote?: boolean
 }
 
-export default function useQuizAnswer({item}: Props) {
+export default function useQuizAnswer({item, isNote}: Props) {
   const dispatch = useDispatch()
 
   const [isCorrect, setCorrect] = useState<boolean>();
@@ -20,8 +21,10 @@ export default function useQuizAnswer({item}: Props) {
     setCorrect(isCorrect)
     setAnswered(true)
     
-    dispatch(isCorrect ? onCorrect(answerData) : onWrong(answerData))
-  }, [dispatch, item])
+    if (isNote != true) {
+      dispatch(isCorrect ? onCorrect(answerData) : onWrong(answerData))
+    }
+  }, [dispatch, item, isNote])
 
   useEffect(() => {
     return () => {

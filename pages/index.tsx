@@ -1,7 +1,7 @@
 import { Box, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Snackbar } from "@mui/material";
 import { useRouter } from "next/router";
+import QuizIcon from '@mui/icons-material/Quiz';
 import InboxIcon from '@mui/icons-material/Inbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
 import useCheckEmptyNote from "@/hooks/useCheckEmptyNote";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,7 @@ export default function Home() {
 
   const moveToNote = useCallback(() => {
     if (!isEmpty) {
-      router.push('/note')
+      router.push('/note/list')
     } else {
       dispatch(showSnackbar({
         message: '아직 오답노트가 없습니다. 문제를 푼 후 다시 와주세요',
@@ -33,7 +33,7 @@ export default function Home() {
         <ListItem disablePadding>
           <ListItemButton onClick={moveToQuiz}>
             <ListItemIcon>
-              <InboxIcon />
+              <QuizIcon />
             </ListItemIcon>
             <ListItemText primary="퀴즈" />
           </ListItemButton>
@@ -41,7 +41,7 @@ export default function Home() {
         <ListItem disablePadding>
           <ListItemButton onClick={moveToNote}>
             <ListItemIcon>
-              <DraftsIcon />
+              <InboxIcon />
             </ListItemIcon>
             <ListItemText primary="오답노트" />
           </ListItemButton>

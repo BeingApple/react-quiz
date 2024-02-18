@@ -1,6 +1,6 @@
-import QuizItem from "./QuizItem"
+import QuizItem from "../QuizItem"
 import { Button, CircularProgress } from "@mui/material"
-import QuizResult from "./QuizResult"
+import QuizResult from "../result"
 import { useSelector } from "react-redux"
 import { AppState } from "@/store/reducers"
 import { useQuery } from "@tanstack/react-query"
