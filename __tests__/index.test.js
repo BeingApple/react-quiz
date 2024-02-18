@@ -7,4 +7,11 @@ describe('<Home />', () => {
     const utils = renderWithProviders(<Home />);
     expect(utils.container).toMatchSnapshot();
   });
+
+  it('has buttons', () => {
+    const utils = renderWithProviders(<Home />)
+
+    utils.getByText('퀴즈')
+    utils.getByText('오답노트')
+  })
 });

@@ -20,6 +20,6 @@
       "@/styles/*": ["styles/*"],
     },
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "__tests__/index.test.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "__tests__/index.test.js", "__tests__/quizList.test.js", "__tests__/quizResult.test.js"],
   "exclude": ["node_modules"]
 }
