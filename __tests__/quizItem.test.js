@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom'
 import QuizItem from '@/components/domain/quiz/QuizItem'
-import { fireEvent, getByText } from '@testing-library/react'
+import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../src/utils/test-utils'
 
 describe('<QuizItem />', () => {
@@ -18,7 +18,7 @@ describe('<QuizItem />', () => {
     const initialProps = { item: sampleItem };
     const utils = renderWithProviders(<QuizItem {...initialProps} {...props} />)
 
-    const { getByText } = utils
+    const { getByText, queryByText } = utils
 
     const item = props.item || initialProps.item
 
@@ -26,11 +26,16 @@ describe('<QuizItem />', () => {
     const question = getByText(item.question)
     const answers = item.answers.map(a => getByText(a))
 
+    const lastAnswerText = `내가 지난 번에 고른 답 : ${item.select_answer}`
+    const correctAnswerText = `정답은 ${item.correct_answer}입니다`
+
     return {
       ...utils,
       category,
       question,
-      answers
+      answers,
+      lastAnswerText,
+      correctAnswerText
     };
   };
 
@@ -65,5 +70,27 @@ describe('<QuizItem />', () => {
     fireEvent.click(incorrectButton)
     getByText('오답')
     getByText('다음 문항')
+  });
+
+  it('click correct answer when note', () => {
+    const { getByText, answers, lastAnswerText, correctAnswerText } = setup({item : {select_answer: 'INCORRECT ANSWER 1', ...sampleItem}, isNote: true})
+    const correctButton = answers[0]
+
+    fireEvent.click(correctButton)
+    getByText('정답')
+    getByText('다음 문항')
+    getByText(lastAnswerText)
+    getByText(correctAnswerText)
+  });
+
+  it('click incorrect answer when note', () => {
+    const { getByText, answers, lastAnswerText, correctAnswerText } = setup({item : {select_answer: 'INCORRECT ANSWER 1', ...sampleItem}, isNote: true})
+    const incorrectButton = answers[1]
+
+    fireEvent.click(incorrectButton)
+    getByText('오답')
+    getByText('다음 문항')
+    getByText(lastAnswerText)
+    getByText(correctAnswerText)
   });
 });
