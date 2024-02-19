@@ -36,8 +36,8 @@ const QuizItem = ({item, isNote}: Props) => {
               <Typography variant="h5" component="div" color={isCorrect? "green" : "red"}>{isCorrect ? '정답' : '오답'}</Typography>
               {isNote ? (
                 <>
-                  <Typography variant="h5" component="div" >정답은 {item?.correct_answer}입니다</Typography>
-                  <Typography variant="h5" component="div" >내가 지난 번에 고른 답 : {item?.select_answer}</Typography>
+                  <Typography variant="h5" component="div" >정답은 {decode(item?.correct_answer)}입니다</Typography>
+                  <Typography variant="h5" component="div" >내가 지난 번에 고른 답 : {decode(item?.select_answer)}</Typography>
                 </>
               ) : <></>}
               <Button variant="outlined" size="large" onClick={onNext} sx={{m: 2}}>다음 문항</Button>
