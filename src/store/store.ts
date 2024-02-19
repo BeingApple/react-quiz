@@ -12,11 +12,20 @@ const persistConfig = {
 const persistedReducers = persistReducer(persistConfig, rootReducer)
 
 export function setupStore(preloadedState?: RootState) {
-  return configureStore({
-    reducer: persistedReducers,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
-    preloadedState
-  })
+  if (typeof window === 'undefined') {
+    //NextJs cannot use persistStore
+    return configureStore({
+      reducer: rootReducer,
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+      preloadedState
+    });
+  } else {
+    return configureStore({
+      reducer: persistedReducers,
+      middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
+      preloadedState
+    })
+  }
 }
 
 export type RootState = ReturnType<typeof persistedReducers>

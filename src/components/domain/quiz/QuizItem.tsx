@@ -1,7 +1,6 @@
 import { Quiz } from "@/types/quiz-types"
-import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid } from "@mui/material"
+import { Button, Typography, Card, CardContent, Divider, Box, CardActionArea, Grid, Paper } from "@mui/material"
 import {decode} from 'html-entities';
-import QuizPaper from "../../ui-components/quiz/QuizPaper";
 import { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { addIndex } from "@/store/reducers/playing";
@@ -25,7 +24,7 @@ const QuizItem = ({item, isNote}: Props) => {
   }, [dispatch])
 
   return (
-    <QuizPaper>
+    <Paper>
         <Box sx={{p: 2}}>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item?.category)}</Typography>
           <Typography variant="h5" component="div">{decode(item?.question)}</Typography>
@@ -60,7 +59,7 @@ const QuizItem = ({item, isNote}: Props) => {
             </Grid>
           }
         </Box>
-    </QuizPaper>
+    </Paper>
   )
 }
 

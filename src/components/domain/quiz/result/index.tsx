@@ -1,5 +1,4 @@
-import QuizPaper from "../../../ui-components/quiz/QuizPaper"
-import { Box, Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material"
+import { Box, Button, Card, CardContent, Divider, Paper, Stack, Typography } from "@mui/material"
 import { Moment } from "moment"
 import { useCallback } from "react"
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
@@ -61,22 +60,22 @@ const QuizResult = ({startAt, endAt, correctList, wrongList}: Props) => {
   }, [dispatch, refetch, router, wrongList])
 
   return (
-    <QuizPaper>
+    <Paper>
       <Box sx={{p: 2}}>
         <Typography variant="h5" component="div">결과</Typography>
       </Box>
       <Divider />
       <Box sx={{p: 2}}>
         <Stack spacing={2}>
-          <QuizPaper>
+          <Paper>
             <Typography variant="body2" color="text.secondary">소요된 시간 : {timeString}</Typography>
-          </QuizPaper>
-          <QuizPaper>
+          </Paper>
+          <Paper>
             <Typography variant="body2" color="text.secondary">정답 개수 : {correctList.length}</Typography>
-          </QuizPaper>
-          <QuizPaper>
+          </Paper>
+          <Paper>
             <Typography variant="body2" color="text.secondary">오답 개수 : {wrongList.length}</Typography>
-          </QuizPaper>
+          </Paper>
           <Card>
             <CardContent>
               {chartData && <Pie data={chartData} /> }
@@ -85,7 +84,7 @@ const QuizResult = ({startAt, endAt, correctList, wrongList}: Props) => {
         </Stack>
       </Box>
       <Button onClick={onReset}>재시작</Button>
-    </QuizPaper>
+    </Paper>
   )
 }
 
