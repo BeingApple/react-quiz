@@ -7,8 +7,6 @@ import { setupStore } from '@/store/store'
 import Head from "next/head";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Layout from "@/components/layout/Layout";
-import { persistStore } from "redux-persist";
-import { PersistGate } from "redux-persist/integration/react";
 import { AppCacheProvider } from "@mui/material-nextjs/v14-pagesRouter"
 import theme from "@/themes/theme"
 
@@ -17,7 +15,6 @@ export default function App(props: AppProps) {
 
   const [queryClient] = useState(() => new QueryClient())
   const store = setupStore()
-  const persistor = persistStore(store);
 
   return (
     <AppCacheProvider {...props}>
@@ -25,18 +22,16 @@ export default function App(props: AppProps) {
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <ReduxProvider store={store}>
-        <PersistGate loading={null} persistor={persistor}>
-          <QueryClientProvider client={queryClient}>
-            <HydrationBoundary state={dehydratedState}>
-              <ThemeProvider theme={theme}>
-                <CssBaseline />
-                <Layout>
-                  <Component {...restPageProps} />
-                </Layout>
-              </ThemeProvider >
-            </HydrationBoundary>
-          </QueryClientProvider>
-        </PersistGate>
+        <QueryClientProvider client={queryClient}>
+          <HydrationBoundary state={dehydratedState}>
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
+              <Layout>
+                <Component {...restPageProps} />
+              </Layout>
+            </ThemeProvider >
+          </HydrationBoundary>
+        </QueryClientProvider>
       </ReduxProvider>
     </AppCacheProvider>
   );

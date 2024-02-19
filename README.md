@@ -14,7 +14,6 @@
 * html-entities
 * moment
 * chart.js
-* redux-persist
 * @mui
 
 ## redux
@@ -146,6 +145,19 @@ props를 통해 넘겨받은 시작, 종료시간 차이를 계산하여 나온 
 
 `@/components/domain/note/list` 를 테스트합니다. 유저가 퀴즈풀이를 진행하며 응답했다 가정한 더미데이터를 바탕으로 `2024-02-19 00:00:00` 에 기록된 오답노트를 더미로 생성하여 컴포넌트에 제공합니다.
 `dateToString` 유틸 함수를 통해 파싱된 날짜대로 목록이 잘 노출되는지 테스트합니다.
+
+## SSG, SSR
+next는 빌드 시에 페이지를 사전 생성한다고 알고 있습니다. 그래서 별도의 설정이 되어있지 않은 react 앱과는 다르게 소스 보기를 할 경우 HTML이 구성되어 있고 이로 인해 SEO나 페이지 로딩 속도에서 이점을 가지는 부분이 있다고 알고 있습니다.
+
+
+그래서 프로젝트 요구 사항이 어느 정도 마무리 되고 해당 기능을 살펴 보면서 도입하려고 하는데 어떻게 소스보기를 해도 다음과 같았습니다.
+```
+<body>
+    <div id="__next"></div>
+    <script id="__NEXT_DATA__" type="application/json" crossorigin="">{"props":{"pageProps":{}},"page":"/","query":{},"buildId":"sbf0UzUwh0eiN43UWQOLr","nextExport":true,"autoExport":true,"isFallback":false,"scriptLoader":[]}</script>
+</body>
+```
+원인을 mui, redux, react-query 정도로 좁혀서 확인해보았는데 `_app.tsx` 의 `PersistGate`를 제거하니 정상적으로 사전 생성이 되는 것을 확인하고 기존에 사용 중이던 `redux-persist` 라이브러리를 제거 하였습니다.
 
 ## 소감
 일단 이런 경험을 할 수 있게 된 것 자체에 큰 의미가 있다고 생각합니다. 제가 과거보다 성장한 바가 있구나 싶으면서도 역시 배움에는 끝이 없다는 것을 느끼게 되었습니다. 남들이 만들어 놓은 것 위에서 여차저차 따라해보는 것은 그닥 어렵다고 느끼지 않았는데 이렇게 제로투원으로 직접 프로젝트를 작업해보니 생각보다 호락호락하지 않다고 느꼈습니다. 

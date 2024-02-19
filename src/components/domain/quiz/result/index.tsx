@@ -60,20 +60,20 @@ const QuizResult = ({startAt, endAt, correctList, wrongList}: Props) => {
   }, [dispatch, refetch, router, wrongList])
 
   return (
-    <Paper>
+    <Paper sx={{p: 2, m: 2}}>
       <Box sx={{p: 2}}>
         <Typography variant="h5" component="div">결과</Typography>
       </Box>
       <Divider />
       <Box sx={{p: 2}}>
         <Stack spacing={2}>
-          <Paper>
+          <Paper sx={{p: 2}}>
             <Typography variant="body2" color="text.secondary">소요된 시간 : {timeString}</Typography>
           </Paper>
-          <Paper>
+          <Paper sx={{p: 2}}>
             <Typography variant="body2" color="text.secondary">정답 개수 : {correctList.length}</Typography>
           </Paper>
-          <Paper>
+          <Paper sx={{p: 2}}>
             <Typography variant="body2" color="text.secondary">오답 개수 : {wrongList.length}</Typography>
           </Paper>
           <Card>

@@ -24,7 +24,7 @@ const QuizItem = ({item, isNote}: Props) => {
   }, [dispatch])
 
   return (
-    <Paper>
+    <Paper sx={{p: 2, m: 2}}>
         <Box sx={{p: 2}}>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>{decode(item?.category)}</Typography>
           <Typography variant="h5" component="div">{decode(item?.question)}</Typography>
