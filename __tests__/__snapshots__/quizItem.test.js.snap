@@ -3,7 +3,7 @@
 exports[`<QuizItem /> matches snapshot 1`] = `
 <div>
   <div
-    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1ps6pg7-MuiPaper-root"
+    class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-1pnr7o4-MuiPaper-root"
   >
     <div
       class="MuiBox-root css-19midj6"

@@ -1,7 +1,6 @@
 import { Note, Quiz } from '@/types/quiz-types'
 import { createSlice } from '@reduxjs/toolkit'
 import moment from 'moment'
-import { Moment } from 'moment'
 
 type State = {
   noteList: Array<Note>
@@ -20,6 +19,10 @@ const note = createSlice({
         recordAt: moment(),
         wrongList: action.payload
       })
+
+      if (window !== undefined) {
+        window.localStorage.setItem("note", JSON.stringify(state.noteList))
+      }
     },
   }
 })

@@ -4,6 +4,7 @@ import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemTex
 import RuleIcon from '@mui/icons-material/Rule';
 import { dateToString } from "@/utils/date-utils";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function NoteList() {
   const router = useRouter()
