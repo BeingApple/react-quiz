@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom'
 import Home from '../pages/index'
+import { fireEvent } from '@testing-library/react'
 import { renderWithProviders } from '../src/utils/test-utils'
 
 describe('<Home />', () => {
@@ -13,5 +14,14 @@ describe('<Home />', () => {
 
     utils.getByText('퀴즈')
     utils.getByText('오답노트')
+  })
+
+  it('click note buttons with empty preloaded state', () => {
+    const utils = renderWithProviders(<Home />, {preloadedState: {}})
+    const button = utils.getByText('오답노트')
+
+    fireEvent.click(button)
+
+    utils.findByText('아직 오답노트가 없습니다. 문제를 푼 후 다시 와주세요')
   })
 });

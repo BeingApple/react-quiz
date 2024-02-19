@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import moment from 'moment'
 
 type State = {
   open: boolean

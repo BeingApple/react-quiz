@@ -18,7 +18,7 @@ describe('<QuizItem />', () => {
     const initialProps = { item: sampleItem };
     const utils = renderWithProviders(<QuizItem {...initialProps} {...props} />)
 
-    const { getByText, queryByText } = utils
+    const { getByText } = utils
 
     const item = props.item || initialProps.item
 
