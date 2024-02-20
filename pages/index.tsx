@@ -4,13 +4,16 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import InboxIcon from '@mui/icons-material/Inbox';
 import useCheckEmptyNote from "@/hooks/useCheckEmptyNote";
 import { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/store/reducers/snackbar";
+import { AppState } from "@/store/reducers";
 
 export default function Home() {
   const router = useRouter()
+
   const dispatch = useDispatch()
-  const {isEmpty} = useCheckEmptyNote()
+  const { noteList } = useSelector((state: AppState) => state.note)
+  const {isEmpty} = useCheckEmptyNote({noteList: noteList})
 
   const moveToQuiz = useCallback(() => {
     router.push('/quiz')
@@ -35,7 +38,7 @@ export default function Home() {
             <ListItemIcon>
               <QuizIcon />
             </ListItemIcon>
-            <ListItemText primary="퀴즈" />
+            <ListItemText primary="퀴즈 풀기" />
           </ListItemButton>
         </ListItem>
         <ListItem disablePadding>
@@ -43,7 +46,7 @@ export default function Home() {
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
-            <ListItemText primary="오답노트" />
+            <ListItemText primary="오답 노트" />
           </ListItemButton>
         </ListItem>
       </List>

@@ -12,13 +12,13 @@ describe('<Home />', () => {
   it('has buttons', () => {
     const utils = renderWithProviders(<Home />)
 
-    utils.getByText('퀴즈')
-    utils.getByText('오답노트')
+    utils.getByText('퀴즈 풀기')
+    utils.getByText('오답 노트')
   })
 
   it('click note buttons with empty preloaded state', () => {
     const utils = renderWithProviders(<Home />, {preloadedState: {}})
-    const button = utils.getByText('오답노트')
+    const button = utils.getByText('오답 노트')
 
     fireEvent.click(button)
 

@@ -1,10 +1,11 @@
-import { AppState } from "@/store/reducers";
+import { Note } from "@/types/quiz-types";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 
-export default function useCheckEmptyNote() {
-  const { noteList } = useSelector((state: AppState) => state.note)
+type Props = {
+  noteList: Array<Note>
+}
 
+export default function useCheckEmptyNote({noteList}: Props) {
   const [empty, setEmpty] = useState(noteList.length == 0)
 
   useEffect(() => {
